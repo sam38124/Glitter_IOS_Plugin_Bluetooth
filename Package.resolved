@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "JzOsBleHelper",
+        "repositoryURL": "https://github.com/sam38124/JzOsBleHelper",
+        "state": {
+          "branch": null,
+          "revision": "f931d7960814630d4a1d4e3c65c3f7edea9607f2",
+          "version": "1.0.7"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
