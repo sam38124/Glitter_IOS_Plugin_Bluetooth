@@ -3,6 +3,7 @@ import CoreBluetooth
 import Glitter_IOS
 public class Glitter_BLE:BleCallBack{
     public static var instance:Glitter_BLE? = nil
+    public static var debugMode=false
     public static func getInstance() -> Glitter_BLE{
         if(instance==nil){instance=Glitter_BLE()}
        return instance!
@@ -119,6 +120,7 @@ public class Glitter_BLE:BleCallBack{
         act.webView.evaluateJavaScript("""
         glitter.share.bleCallBack.rx(JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
         """)
+        print("blemessage_rx:\(a.readHEX())")
     }
     
     open func tx(_ b: BleBinary) {
@@ -129,6 +131,7 @@ public class Glitter_BLE:BleCallBack{
         act.webView.evaluateJavaScript("""
         glitter.share.bleCallBack.tx(JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
         """)
+        print("blemessage_tx:\(b.readHEX())")
     }
     
     open func scanBack(_ device: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
