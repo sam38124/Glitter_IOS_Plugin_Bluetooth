@@ -156,9 +156,12 @@ public class Glitter_BLE:BleCallBack{
             advermap.readHEX=tempstring
             advermap.readBytes=[UInt8](data as! Data)
         }
-        act.webView.evaluateJavaScript("""
-        glitter.share.bleCallBack.scanBack(JSON.parse('\(encoded)'),JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
-        """)
+        DispatchQueue.main.async {
+            self.act.webView.evaluateJavaScript("""
+            glitter.share.bleCallBack.scanBack(JSON.parse('\(encoded)'),JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
+            """)
+        }
+    
     }
     open func needOpen() { }
 }
