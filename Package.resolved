@@ -2,12 +2,39 @@
   "object": {
     "pins": [
       {
+        "package": "Glitter_IOS",
+        "repositoryURL": "https://github.com/sam38124/Glitter_IOS",
+        "state": {
+          "branch": null,
+          "revision": "448c68ded142420c7e66c938e0379a980d44115e",
+          "version": "2.2.1"
+        }
+      },
+      {
         "package": "JzOsBleHelper",
         "repositoryURL": "https://github.com/sam38124/JzOsBleHelper",
         "state": {
           "branch": null,
-          "revision": "f931d7960814630d4a1d4e3c65c3f7edea9607f2",
-          "version": "1.0.7"
+          "revision": "a6723530ca86884cc6d00a82794ff8e913c0a213",
+          "version": "1.0.8"
+        }
+      },
+      {
+        "package": "JzOsHttpExtension",
+        "repositoryURL": "https://github.com/sam38124/JzOsHttpExtension",
+        "state": {
+          "branch": null,
+          "revision": "b40142dcb54831f1d15e456a99c49449e803a53e",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "JzOsSqlHelper",
+        "repositoryURL": "https://github.com/sam38124/JzOsSqlHelper",
+        "state": {
+          "branch": null,
+          "revision": "4979910f22ad66ac8e7499df86822bcffdc22238",
+          "version": "2.0.2"
         }
       }
     ]
