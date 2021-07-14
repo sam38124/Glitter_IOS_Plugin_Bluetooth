@@ -70,15 +70,17 @@ public class Glitter_BLE:BleCallBack{
         //Connect
         act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)Connect", function: {
             request in
-            let timeOut=request.receiveValue["timeOut"]! as! Int
-            bleUtil.connect(self.deviceList[Int("\(request.receiveValue["address"]!)")!],timeOut)
-            var time=0
-            while(!(bleUtil.IsConnect)&&time<timeOut){
-                sleep(1)
-                time+=1
+            DispatchQueue.global().async {
+                let timeOut=request.receiveValue["timeOut"]! as! Int
+                bleUtil.connect(self.deviceList[Int("\(request.receiveValue["address"]!)")!],timeOut)
+                var time=0
+                while(!(bleUtil.IsConnect)&&time<timeOut){
+                    sleep(1)
+                    time+=1
+                }
+                request.responseValue["result"]=bleUtil.IsConnect
+                request.finish()
             }
-            request.responseValue["result"]=bleUtil.IsConnect
-            request.finish()
         }))
         //DisConnect
         act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)DisConnect", function: {
