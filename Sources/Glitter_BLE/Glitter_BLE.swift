@@ -6,14 +6,15 @@ public class Glitter_BLE:BleCallBack{
     public static var debugMode=false
     public static func getInstance() -> Glitter_BLE{
         if(instance==nil){instance=Glitter_BLE()}
-       return instance!
+        return instance!
     }
     let act=GlitterActivity.getInstance()
+    var callBack: RequestFunction? = nil
     //儲存的藍芽陣列
     var deviceList=[CBPeripheral]()
     public func create() {
         let bleUtil=BleHelper(self)
-        let glitterName="Glitter_BLE"
+        let glitterName="Glitter_BLE_"
         //Start
         act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)Start", function: {
             request in
@@ -95,45 +96,65 @@ public class Glitter_BLE:BleCallBack{
             request.responseValue["result"]=bleUtil.IsConnect
             request.finish()
         }))
+        //SetCallBack
+        act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)SetCallBack", function: {
+            request in
+            request.responseValue["result"]=bleUtil.IsConnect
+            self.callBack=request
+        }))
     }
-
     
-  
-   
+    
+    
+    
     
     /// BleCallBack
     open func onConnecting() {
-        act.webView.evaluateJavaScript("glitter.share.bleCallBack.onConnecting();")
+        if(callBack != nil){
+            callBack?.responseValue.removeAll()
+            callBack!.responseValue["function"]="onConnecting"
+            callBack!.callback()
+        }
     }
     
     open func onConnectFalse() {
-     
+        if(callBack != nil){
+            callBack?.responseValue.removeAll()
+            callBack!.responseValue["function"]="onConnectFalse"
+            callBack!.callback()
+        }
     }
     
     open func onConnectSuccess() {
-        act.webView.evaluateJavaScript("glitter.share.bleCallBack.onConnectSuccess();")
+        if(callBack != nil){
+            callBack?.responseValue.removeAll()
+            callBack!.responseValue["function"]="onConnectSuccess"
+            callBack!.callback()
+        }
     }
     
     open func rx(_ a: BleBinary) {
-        let encoder: JSONEncoder = JSONEncoder()
         let advermap:BleAdvertise = BleAdvertise ()
         advermap.readHEX=a.readHEX()
         advermap.readBytes=a.readBytes()
-        act.webView.evaluateJavaScript("""
-        glitter.share.bleCallBack.rx(JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
-        """)
-        print("blemessage_rx:\(a.readHEX())")
+        if(callBack != nil){
+            callBack?.responseValue.removeAll()
+            callBack!.responseValue["function"]="rx"
+            callBack!.responseValue["data"]=advermap
+            callBack!.callback()
+        }
     }
     
     open func tx(_ b: BleBinary) {
-        let encoder: JSONEncoder = JSONEncoder()
         let advermap:BleAdvertise = BleAdvertise ()
         advermap.readHEX=b.readHEX()
         advermap.readBytes=b.readBytes()
-        act.webView.evaluateJavaScript("""
-        glitter.share.bleCallBack.tx(JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
-        """)
-        print("blemessage_tx:\(b.readHEX())")
+        if(callBack != nil){
+            callBack?.responseValue.removeAll()
+            callBack!.responseValue["function"]="tx"
+            callBack!.responseValue["data"]=advermap
+            callBack!.callback()
+        }
     }
     
     open func scanBack(_ device: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -141,7 +162,7 @@ public class Glitter_BLE:BleCallBack{
             deviceList.append(device)
         }
         var itmap:Dictionary<String,String> = Dictionary<String,String> ()
-
+        
         itmap["name"]=device.name
         itmap["rssi"]="\(RSSI)"
         itmap["address"]="\(deviceList.firstIndex(of: device) ?? -1)"
@@ -161,12 +182,13 @@ public class Glitter_BLE:BleCallBack{
             advermap.readHEX=tempstring
             advermap.readBytes=[UInt8](data as! Data)
         }
-        DispatchQueue.main.async {
-            self.act.webView.evaluateJavaScript("""
-            glitter.share.bleCallBack.scanBack(JSON.parse('\(encoded)'),JSON.parse('\(String(data: try!  encoder.encode(advermap) , encoding: .utf8)!)'));
-            """)
+        if(callBack != nil){
+            callBack!.responseValue.removeAll()
+            callBack!.responseValue["function"]="scanBack"
+            callBack!.responseValue["device"]=itmap
+            callBack!.responseValue["advertise"]=advermap
+            callBack!.callback()
         }
-    
     }
     open func needOpen() { }
 }
