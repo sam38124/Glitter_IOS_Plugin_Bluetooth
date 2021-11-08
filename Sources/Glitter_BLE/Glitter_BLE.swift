@@ -134,9 +134,9 @@ public class Glitter_BLE:BleCallBack{
     }
     
     open func rx(_ a: BleBinary) {
-        let advermap:BleAdvertise = BleAdvertise ()
-        advermap.readHEX=a.readHEX()
-        advermap.readBytes=a.readBytes()
+        var advermap:Dictionary<String,AnyObject> = [:]
+        advermap["readHEX"]=a.readHEX() as AnyObject
+        advermap["readBytes"]=a.readBytes() as AnyObject
         if(callBack != nil){
             callBack?.responseValue.removeAll()
             callBack!.responseValue["function"]="rx"
@@ -146,9 +146,9 @@ public class Glitter_BLE:BleCallBack{
     }
     
     open func tx(_ b: BleBinary) {
-        let advermap:BleAdvertise = BleAdvertise ()
-        advermap.readHEX=b.readHEX()
-        advermap.readBytes=b.readBytes()
+        var advermap:Dictionary<String,AnyObject> = [:]
+        advermap["readHEX"]=b.readHEX() as AnyObject
+        advermap["readBytes"]=b.readBytes() as AnyObject
         if(callBack != nil){
             callBack?.responseValue.removeAll()
             callBack!.responseValue["function"]="tx"
@@ -162,7 +162,6 @@ public class Glitter_BLE:BleCallBack{
             deviceList.append(device)
         }
         var itmap:Dictionary<String,String> = Dictionary<String,String> ()
-        
         itmap["name"]=device.name
         itmap["rssi"]="\(RSSI)"
         itmap["address"]="\(deviceList.firstIndex(of: device) ?? -1)"
@@ -173,14 +172,14 @@ public class Glitter_BLE:BleCallBack{
         let encoder: JSONEncoder = JSONEncoder()
         let encoded = String(data: try!  encoder.encode(itmap) , encoding: .utf8)!
         let data=advertisementData["kCBAdvDataManufacturerData"]
-        let advermap:BleAdvertise = BleAdvertise ()
+        var advermap:Dictionary<String,AnyObject> = [:]
         if(data is Data){
             var tempstring = ""
             for i in (data as! Data){
                 tempstring = tempstring+String(format:"%02X",i)
             }
-            advermap.readHEX=tempstring
-            advermap.readBytes=[UInt8](data as! Data)
+            advermap["readHEX"]=tempstring as AnyObject
+            advermap["readBytes"]=[UInt8](data as! Data) as AnyObject
         }
         if(callBack != nil){
             callBack!.responseValue.removeAll()
@@ -191,10 +190,4 @@ public class Glitter_BLE:BleCallBack{
         }
     }
     open func needOpen() { }
-}
-//資料封包
-class BleAdvertise:Encodable {
-    var readUTF=""
-    var readBytes:[UInt8]=[UInt8]()
-    var readHEX=""
 }
