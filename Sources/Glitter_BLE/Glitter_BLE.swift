@@ -157,37 +157,45 @@ public class Glitter_BLE:BleCallBack{
         }
     }
     
+    var pastime = Date().timeIntervalSince1970
+    var scanList:[Dictionary<String,Any>] = []
     open func scanBack(_ device: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if(!deviceList.contains(device)){
             deviceList.append(device)
         }
-        var itmap:Dictionary<String,String> = Dictionary<String,String> ()
+        var itmap:Dictionary<String,Any> = Dictionary<String,Any> ()
         itmap["name"]=device.name
         itmap["rssi"]="\(RSSI)"
         itmap["address"]="\(deviceList.firstIndex(of: device) ?? -1)"
         if(advertisementData["kCBAdvDataLocalName"] != nil){
-            itmap["name"]="\(advertisementData["kCBAdvDataLocalName"] ?? "")"
+        itmap["name"]="\(advertisementData["kCBAdvDataLocalName"] ?? "")"
         }
-        //        itmap["address"]=deviceList.index
-        let encoder: JSONEncoder = JSONEncoder()
-        let encoded = String(data: try!  encoder.encode(itmap) , encoding: .utf8)!
         let data=advertisementData["kCBAdvDataManufacturerData"]
-        var advermap:Dictionary<String,AnyObject> = [:]
         if(data is Data){
             var tempstring = ""
             for i in (data as! Data){
                 tempstring = tempstring+String(format:"%02X",i)
             }
-            advermap["readHEX"]=tempstring as AnyObject
-            advermap["readBytes"]=[UInt8](data as! Data) as AnyObject
+            itmap["readHEX"]=tempstring as AnyObject
+            itmap["readBytes"]=[UInt8](data as! Data) as AnyObject
         }
-        if(callBack != nil){
-            callBack!.responseValue.removeAll()
-            callBack!.responseValue["function"]="scanBack"
-            callBack!.responseValue["device"]=itmap
-            callBack!.responseValue["advertise"]=advermap
-            callBack!.callback()
+        scanList.append(itmap)
+        if(GetTime(pastime)>1){
+            pastime=Date().timeIntervalSince1970
+            if(callBack != nil){
+                callBack!.responseValue.removeAll()
+                callBack!.responseValue["device"]=scanList
+                callBack!.responseValue["function"]="scanBack"
+                callBack!.callback()
+            }
         }
     }
+    
     open func needOpen() { }
+    
+    func GetTime(_ timeStamp: Double)-> Double{
+        let currentTime = Date().timeIntervalSince1970
+        let reduceTime : TimeInterval = currentTime - timeStamp
+        return reduceTime
+    }
 }
