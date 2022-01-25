@@ -107,13 +107,16 @@ public class Glitter_BLE:BleCallBack{
     
     
     
-    
+    var debugText="JzBleMessage"
     /// BleCallBack
     open func onConnecting() {
         if(callBack != nil){
             callBack?.responseValue.removeAll()
             callBack!.responseValue["function"]="onConnecting"
             callBack!.callback()
+        }
+        if(Glitter_BLE.debugMode){
+            print("\(debugText):onConnecting")
         }
     }
     
@@ -122,6 +125,9 @@ public class Glitter_BLE:BleCallBack{
             callBack?.responseValue.removeAll()
             callBack!.responseValue["function"]="onConnectFalse"
             callBack!.callback()
+            if(Glitter_BLE.debugMode){
+                print("\(debugText):onConnectFalse")
+            }
         }
     }
     
@@ -130,6 +136,10 @@ public class Glitter_BLE:BleCallBack{
             callBack?.responseValue.removeAll()
             callBack!.responseValue["function"]="onConnectSuccess"
             callBack!.callback()
+            if(Glitter_BLE.debugMode){
+                print("\(debugText):onConnectSuccess")
+            }
+         
         }
     }
     
@@ -142,6 +152,10 @@ public class Glitter_BLE:BleCallBack{
             callBack!.responseValue["function"]="rx"
             callBack!.responseValue["data"]=advermap
             callBack!.callback()
+            if(Glitter_BLE.debugMode){
+                print("\(debugText):rx->\(a.readHEX())")
+            }
+     
         }
     }
     
@@ -154,6 +168,9 @@ public class Glitter_BLE:BleCallBack{
             callBack!.responseValue["function"]="tx"
             callBack!.responseValue["data"]=advermap
             callBack!.callback()
+            if(Glitter_BLE.debugMode){
+            print("\(debugText):tx->\(b.readHEX())")
+            }
         }
     }
     
@@ -187,6 +204,9 @@ public class Glitter_BLE:BleCallBack{
                 callBack!.responseValue["device"]=scanList
                 callBack!.responseValue["function"]="scanBack"
                 callBack!.callback()
+                if(Glitter_BLE.debugMode){
+                print("\(debugText):scanList->\(scanList)")
+                }
             }
         }
     }
