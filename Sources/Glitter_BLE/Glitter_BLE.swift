@@ -108,7 +108,7 @@ public class Glitter_BLE:BleCallBack{
             self.callBack=request
         }))
         //SetNotify
-        act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)SetCallBack", function: {
+        act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)SetNotify", function: {
             request in
             let rxChannel=request.receiveValue["rxChannel"] as! String
             guard let rx = bleUtil.charDictionary[rxChannel] else {
