@@ -79,6 +79,11 @@ public class Glitter_BLE:BleCallBack{
                     sleep(1)
                     time+=1
                 }
+                if(self.callBack != nil && (!bleUtil.IsConnect)){
+                    self.callBack?.responseValue.removeAll()
+                    self.callBack!.responseValue["function"]="onConnectFalse"
+                    self.callBack!.callback()
+                }
                 request.responseValue["result"]=bleUtil.IsConnect
                 request.finish()
             }
@@ -123,10 +128,10 @@ public class Glitter_BLE:BleCallBack{
     open func onConnectFalse() {
         if(callBack != nil){
             callBack?.responseValue.removeAll()
-            callBack!.responseValue["function"]="onConnectFalse"
+            callBack!.responseValue["function"]="onDisconnect"
             callBack!.callback()
             if(Glitter_BLE.debugMode){
-                print("\(debugText):onConnectFalse")
+                print("\(debugText):onDisconnect")
             }
         }
     }
