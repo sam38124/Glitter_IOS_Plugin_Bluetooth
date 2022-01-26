@@ -107,6 +107,19 @@ public class Glitter_BLE:BleCallBack{
             request.responseValue["result"]=bleUtil.IsConnect
             self.callBack=request
         }))
+        //SetNotify
+        act.addJavacScriptInterFace(interface: JavaScriptInterFace(functionName: "\(glitterName)SetCallBack", function: {
+            request in
+            let rxChannel=request.receiveValue["rxChannel"] as! String
+            guard let rx = bleUtil.charDictionary[rxChannel] else {
+                print("設定回覆通道:\(rxChannel)")
+                request.responseValue["result"]=false
+                return
+            }
+            bleUtil.connectPeripheral.setNotifyValue(true, for: rx)
+            request.responseValue["result"]=true
+            request.finish()
+        }))
     }
     
     
