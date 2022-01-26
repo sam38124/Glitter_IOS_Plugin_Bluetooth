@@ -15,7 +15,7 @@ let package = Package(
             targets: ["Glitter_BLE"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/sam38124/JzOsBleHelper",from: "1.0.9"),
+        .package(url: "https://github.com/sam38124/JzOsBleHelper",from: "1.1.0"),
         .package(url: "https://github.com/sam38124/Glitter_IOS",from: "2.3.5")
         // .package(url: /* package url */, from: "1.0.0"),
     ],
