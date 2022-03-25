@@ -199,13 +199,14 @@ public class Glitter_BLE:BleCallBack{
             deviceList.append(device)
         }
         var itmap:Dictionary<String,Any> = Dictionary<String,Any> ()
+        itmap["name"]=device.name
         itmap["rssi"]="\(RSSI)"
         itmap["address"]="\(deviceList.firstIndex(of: device) ?? -1)"
         if(advertisementData["kCBAdvDataLocalName"] != nil){
         itmap["name"]="\(advertisementData["kCBAdvDataLocalName"] ?? "")"
         }
+        
         let data=advertisementData["kCBAdvDataManufacturerData"]
-        itmap["adData"]=data
         if(data is Data){
             var tempstring = ""
             for i in (data as! Data){
@@ -224,6 +225,9 @@ public class Glitter_BLE:BleCallBack{
                 callBack!.callback()
                 if(Glitter_BLE.debugMode){
                 print("\(debugText):scanList->\(scanList)")
+                if(device.name == nil){
+                print("nilName:\(advertisementData)")
+                }
                 }
                 scanList.removeAll()
             }
