@@ -199,7 +199,6 @@ public class Glitter_BLE:BleCallBack{
             deviceList.append(device)
         }
         var itmap:Dictionary<String,Any> = Dictionary<String,Any> ()
-        itmap["name"]=device.name
         itmap["rssi"]="\(RSSI)"
         itmap["address"]="\(deviceList.firstIndex(of: device) ?? -1)"
         if(advertisementData["kCBAdvDataLocalName"] != nil){
