@@ -205,6 +205,7 @@ public class Glitter_BLE:BleCallBack{
         itmap["name"]="\(advertisementData["kCBAdvDataLocalName"] ?? "")"
         }
         let data=advertisementData["kCBAdvDataManufacturerData"]
+        itmap["adData"]=data
         if(data is Data){
             var tempstring = ""
             for i in (data as! Data){
