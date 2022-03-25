@@ -225,6 +225,7 @@ public class Glitter_BLE:BleCallBack{
                 if(Glitter_BLE.debugMode){
                 print("\(debugText):scanList->\(scanList)")
                 }
+                scanList.removeAll()
             }
         }
     }
