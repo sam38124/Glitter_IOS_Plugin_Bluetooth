@@ -4,14 +4,15 @@ import Glitter_IOS
 public class Glitter_BLE:BleCallBack{
     public static var instance:Glitter_BLE? = nil
     public static var debugMode=false
-    public static func getInstance() -> Glitter_BLE{
-        if(instance==nil){instance=Glitter_BLE()}
-        return instance!
+    let act:GlitterActivity
+    init(act:GlitterActivity){
+        self.act=act
     }
-    let act=GlitterActivity.getInstance()
+    
     var callBack: RequestFunction? = nil
     //儲存的藍芽陣列
     var deviceList=[CBPeripheral]()
+    
     public func create() {
         let bleUtil=BleHelper(self)
         let glitterName="Glitter_BLE_"
@@ -121,10 +122,7 @@ public class Glitter_BLE:BleCallBack{
             request.finish()
         }))
     }
-    
-    
-    
-    
+
     var debugText="JzBleMessage"
     /// BleCallBack
     open func onConnecting() {
@@ -137,7 +135,7 @@ public class Glitter_BLE:BleCallBack{
             print("\(debugText):onConnecting")
         }
     }
-    
+
     open func onConnectFalse() {
         if(callBack != nil){
             callBack?.responseValue.removeAll()
@@ -148,7 +146,7 @@ public class Glitter_BLE:BleCallBack{
             }
         }
     }
-    
+
     open func onConnectSuccess() {
         if(callBack != nil){
             callBack?.responseValue.removeAll()
@@ -157,10 +155,10 @@ public class Glitter_BLE:BleCallBack{
             if(Glitter_BLE.debugMode){
                 print("\(debugText):onConnectSuccess")
             }
-         
+
         }
     }
-    
+
     open func rx(_ a: BleBinary) {
         var advermap:Dictionary<String,AnyObject> = [:]
         advermap["readHEX"]=a.readHEX() as AnyObject
@@ -173,10 +171,10 @@ public class Glitter_BLE:BleCallBack{
             if(Glitter_BLE.debugMode){
                 print("\(debugText):rx->\(a.readHEX())")
             }
-     
+
         }
     }
-    
+
     open func tx(_ b: BleBinary) {
         var advermap:Dictionary<String,AnyObject> = [:]
         advermap["readHEX"]=b.readHEX() as AnyObject
@@ -191,7 +189,7 @@ public class Glitter_BLE:BleCallBack{
             }
         }
     }
-    
+
     var pastime = Date().timeIntervalSince1970
     var scanList:[Dictionary<String,Any>] = []
     open func scanBack(_ device: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -205,8 +203,9 @@ public class Glitter_BLE:BleCallBack{
         if(advertisementData["kCBAdvDataLocalName"] != nil){
         itmap["name"]="\(advertisementData["kCBAdvDataLocalName"] ?? "")"
         }
-        
+
         let data=advertisementData["kCBAdvDataManufacturerData"]
+        print("typeOfAd:")
         if(data is Data){
             var tempstring = ""
             for i in (data as! Data){
@@ -225,17 +224,14 @@ public class Glitter_BLE:BleCallBack{
                 callBack!.callback()
                 if(Glitter_BLE.debugMode){
                 print("\(debugText):scanList->\(scanList)")
-                if(device.name == nil){
-                print("nilName:\(advertisementData)")
-                }
                 }
                 scanList.removeAll()
             }
         }
     }
-    
+
     open func needOpen() { }
-    
+
     func GetTime(_ timeStamp: Double)-> Double{
         let currentTime = Date().timeIntervalSince1970
         let reduceTime : TimeInterval = currentTime - timeStamp

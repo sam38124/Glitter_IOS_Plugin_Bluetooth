@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "Glitter_IOS",
-        "repositoryURL": "https://github.com/sam38124/Glitter_IOS",
+        "repositoryURL": "https://github.com/sam38124/GlitterForIOS",
         "state": {
           "branch": null,
-          "revision": "721b15c824009d0e40a8d0720e69a82d51d7e177",
-          "version": "2.3.5"
+          "revision": "33dec5b31b1d4cc59ee75958f468b382dc11b98d",
+          "version": "2.5.3"
         }
       },
       {

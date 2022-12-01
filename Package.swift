@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/sam38124/JzOsBleHelper",from: "1.1.1"),
-        .package(url: "https://github.com/sam38124/Glitter_IOS",from: "2.3.5")
+        .package(url: "https://github.com/sam38124/GlitterForIOS",from: "2.5.3")
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [
@@ -24,7 +24,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "Glitter_BLE",
-            dependencies: ["JzOsBleHelper","Glitter_IOS"]),
+            dependencies: ["JzOsBleHelper" , .product(name: "Glitter_IOS", package: "GlitterForIOS")]),
         .testTarget(
             name: "Glitter_BLETests",
             dependencies: ["Glitter_BLE"]),
