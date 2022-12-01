@@ -5,7 +5,7 @@ public class Glitter_BLE:BleCallBack{
     public static var instance:Glitter_BLE? = nil
     public static var debugMode=false
     let act:GlitterActivity
-    init(act:GlitterActivity){
+    public init(act:GlitterActivity){
         self.act=act
     }
     
